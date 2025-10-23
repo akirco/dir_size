@@ -11,6 +11,20 @@ pub async fn get_folder_size(path: String) -> Result<u64> {
   // string to os path
   let path = std::path::Path::new(&path);
 
+  if !path.exists() {
+    return Err(Error::new(
+      Status::GenericFailure,
+      format!("Path does not exist: {}", path.display()),
+    ));
+  }
+
+  if !path.is_dir() {
+    return Err(Error::new(
+      Status::GenericFailure,
+      format!("Path is not a directory: {}", path.display()),
+    ));
+  }
+
   for entry in WalkDir::new(path).follow_links(false) {
     match entry {
       Ok(entry) => {
