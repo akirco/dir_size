@@ -4,10 +4,10 @@ env:
   APP_NAME: dir_size
   MACOSX_DEPLOYMENT_TARGET: '10.13'
   CARGO_INCREMENTAL: '1'
-'on':
+on:
   push:
     branches:
-      - main
+      - master
     tags-ignore:
       - '**'
     paths-ignore:
@@ -16,7 +16,9 @@ env:
       - '**/*.gitignore'
       - .editorconfig
       - docs/**
-  pull_request: null
+  pull_request:
+    branches:
+      - master
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
