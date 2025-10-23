@@ -29,9 +29,10 @@ pub async fn get_folder_size(path: String) -> Result<u64> {
     match entry {
       Ok(entry) => {
         if let Ok(metadata) = entry.metadata()
-          && metadata.is_file() {
-            total_size += metadata.len();
-          }
+          && metadata.is_file()
+        {
+          total_size += metadata.len();
+        }
       }
       Err(e) => {
         eprintln!("error: {}", e);
