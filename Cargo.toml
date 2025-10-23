@@ -1,0 +1,26 @@
+
+[package]
+authors = ["LongYinan <lynweklm@gmail.com>"]
+edition = "2021"
+name    = "dir_size"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+ignore      = "0.4.24"
+napi        = { version = "3.0.0", features = ["full"] }
+napi-derive = "3.0.0"
+num_cpus    = "1.17.0"
+tokio       = { version = "1", features = ["full"] }
+walkdir     = "2.5.0"
+
+[build-dependencies]
+napi-build = "2"
+
+[profile.release]
+debug     = false
+lto       = true
+opt-level = 3
+strip     = "symbols"
