@@ -225,6 +225,7 @@ jobs:
       - lint
       - test-macOS-windows-binding
       - test-linux-binding
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v5
       - name: Setup node
