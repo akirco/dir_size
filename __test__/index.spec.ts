@@ -4,7 +4,9 @@ import getFolderSize from 'get-folder-size'
 import { getFolderSize as Size } from '../index'
 
 test('sync function from native code', async (t) => {
-  const myFolder = 'E:\\projects\\nextjs'
+  const myFolder = process.cwd()
+  console.log(myFolder)
+
   const start1 = Date.now()
   const folderSize = await getFolderSize.loose(myFolder)
   const end1 = Date.now()

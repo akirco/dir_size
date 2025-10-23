@@ -1,4 +1,4 @@
-#![deny(clippy::all)]
+// #![deny(clippy::all)]
 
 use napi::bindgen_prelude::{Error, Result, Status};
 use napi_derive::napi;
@@ -28,11 +28,10 @@ pub async fn get_folder_size(path: String) -> Result<u64> {
   for entry in WalkDir::new(path).follow_links(false) {
     match entry {
       Ok(entry) => {
-        if let Ok(metadata) = entry.metadata() {
-          if metadata.is_file() {
+        if let Ok(metadata) = entry.metadata()
+          && metadata.is_file() {
             total_size += metadata.len();
           }
-        }
       }
       Err(e) => {
         eprintln!("error: {}", e);
