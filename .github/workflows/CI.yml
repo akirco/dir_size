@@ -8,8 +8,8 @@ on:
   push:
     branches:
       - master
-    tags-ignore:
-      - '**'
+    tags:
+      - 'v*'
     paths-ignore:
       - '**/*.md'
       - LICENSE
@@ -248,16 +248,44 @@ jobs:
       - name: Publish
         run: |
           npm config set provenance true
-          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
-          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
+
+          # Check if this is a tag push
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            TAG=${GITHUB_REF#refs/tags/}
+            echo "Publishing tag: $TAG"
+
+            if echo "$TAG" | grep -q "^v[0-9]\+\.[0-9]\+\.[0-9]\+$";
+            then
+              echo "Publishing as stable release"
+              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+              npm publish --access public
+            elif echo "$TAG" | grep -q "^v[0-9]\+\.[0-9]\+\.[0-9]\+";
+            then
+              echo "Publishing as pre-release"
+              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+              npm publish --tag next --access public
+            else
+              echo "Invalid tag format for publishing, skipping publish"
+            fi
           else
-            echo "Not a release, skipping publish"
+            # Fallback to commit message check for branch pushes
+            COMMIT_MSG=$(git log -1 --pretty=%B)
+            echo "Commit message: $COMMIT_MSG"
+
+            if echo "$COMMIT_MSG" | grep -q "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
+            then
+              echo "Publishing as stable release from branch"
+              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+              npm publish --access public
+            elif echo "$COMMIT_MSG" | grep -q "^[0-9]\+\.[0-9]\+\.[0-9]\+";
+            then
+              echo "Publishing as pre-release from branch"
+              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+              npm publish --tag next --access public
+            else
+              echo "Not a release, skipping publish"
+              echo "To publish, use a commit message that starts with a version number (e.g., '1.0.0' or '1.0.0-beta') or push a tag like 'v1.0.0'"
+            fi
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
