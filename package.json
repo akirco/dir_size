@@ -1,6 +1,6 @@
 {
   "name": "@akirco/dir_size",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get folder size quickly using N-API and Rust",
   "main": "index.js",
   "repository": {
@@ -15,7 +15,12 @@
     "N-API",
     "Rust",
     "node-addon",
-    "node-addon-api"
+    "node-addon-api",
+    "folder-size",
+    "directory-size",
+    "dir-size",
+    "get-folder-size",
+    "get-directory-size"
   ],
   "files": [
     "index.d.ts",

@@ -2,6 +2,20 @@
 
 Get folder size quickly using N-API and Rust
 
+## Usage
+
+```js
+import { getFolderSize } from '@akirco/dir_size'
+const start = Date.now()
+const folderSize = await getFolderSize(myFolder)
+const end = Date.now()
+console.log('Execution time:', (end2 - start2) / 1000, 's')
+console.log(`The folder is ${folderSize} bytes large`)
+console.log(`That is the same as ${(Number(folderSize) / 1000 / 1000).toFixed(2)} MB`)
+```
+
+## bench
+
 ```
 JavaScript Execution time: 0.331 s
 The folder is 2411680202 bytes large
